@@ -10,21 +10,41 @@ using namespace std;
 
 //GLOBAL VARIABLES
 int numVertex,numEdges,k;
-int ksubgraph[k][numVertex], edgeMatrixGraph[numVertex][numVertex], edgeSpanMatrix[numVertex][numVertex]; ///just 0-1 matrix (1 if vertex is present)
-int numksubgraph[k][numVertex], numedgeMatrixGraph[numVertex][numVertex], numedgeSpanMatrix[numVertex][numVertex]; ///numerated
+vector<vector<int> > ksubgraph, edgeMatrixGraph, edgeSpanMatrix;
+vector<vector<int> > numksubgraph, numedgeMatrixGraph, numedgeSpanMatrix;
+//int ksubgraph[k][numVertex], edgeMatrixGraph[numVertex][numVertex], edgeSpanMatrix[numVertex][numVertex]; ///just 0-1 matrix (1 if vertex is present)
+//int numksubgraph[k][numVertex], numedgeMatrixGraph[numVertex][numVertex], numedgeSpanMatrix[numVertex][numVertex]; ///numerated
 
 //Take Input here.
 //read the graph edges as adjacency matrix(GIVE APPROPRIATE NAME FOR MATRIX: SO THAT I CAN GET IT)
+void splitString(string message, string delimiter, string result[], int n) {
+    int i = 0, pos = 0, length = 0, temp;
+    temp = message.find ( delimiter.c_str ( ), pos );
+    while ( temp != -1 )
+    {
+        length = temp - pos;
+        result[i] = message.substr ( pos, length );
+        pos = temp + delimiter.size ( );
+        temp = message.find ( delimiter.c_str ( ), pos );
+        i++;
+    }
+    result[i] = message.substr ( pos );
+    i++;
+    if ( i != n )
+    {
+        cout << "The similarity matrix does not have the correct format.";
+        exit ( 0 );
+    }
+}
 
 void takeInput(string filename){
-    filename=filename+".graph";//------>UNCOMMENT BEFORE SUBMITING-- test.graph now
     vector<string> lines;
     string line;
     ifstream myfile ( filename.c_str () );
     if ( myfile.is_open ( ) )
     {
         while ( getline ( myfile, line ) )
-        {//cout<<"Line read:"<<line<<endl;
+         { //  cout<<"Line read:"<<line<<endl;
             lines.push_back ( line );
         }
         myfile.close ( );
@@ -34,14 +54,42 @@ void takeInput(string filename){
         cout << "Unable to open input file";
         exit ( 0 );
     }
+        
+    string tempLine = lines[0];
+    string *elements = new string[3];
+    splitString ( tempLine, " ", elements, 3 );
+    numVertex = atof ( elements[0].c_str () );
+    numEdges = atof ( elements[1].c_str () );
+    k = atof ( elements[2].c_str () );
 
-        string startTempLine = lines[0];
-        string startElements[n];
-        splitString ( tempLine, " ", elements, n );
+    // vector<vector<int> > matrix(numVertex,vector<int> (numVertex,0));
+    edgeMatrixGraph.resize(numVertex, vector<int> (numVertex, 0));
+    for(int i=0;i<numEdges;i++){
+        string tempLine = lines[i+1];
+        string *elements = new string[2];
+        splitString ( tempLine, " ", elements, 2 );
+        int row = atof ( elements[0].c_str () );
+        int col = atof ( elements[1].c_str () );    
+        // cout<<row<<" "<<col<<endl;
+        edgeMatrixGraph[row-1][col-1]=1;
+        edgeMatrixGraph[col-1][row-1]=1;
+    }
+    // cout<<numVertex<<" "<<numEdges<<" "<<k<<endl;
+    // for(auto row:edgeMatrixGraph){
+    //     for(auto entry:row){
+    //         cout<<entry<<" ";
+    //     }
+    //     cout<<endl;
+    // }
 
 ///less assume i have starting 3 parameters as: numV, numE,k
 ///i filled edgeMatrixGraph by 0/1
-int count=0;
+    int count=0;
+    numksubgraph.resize(k, vector<int> (numVertex, 0));
+    numksubgraph.resize(numVertex, vector<int> (numVertex, 0));
+    numksubgraph.resize(numVertex, vector<int> (numVertex, 0));
+    
+    
     for(int i=0;i<k;i++){
         for(int j=0;j<numVertex;j++){
             numksubgraph[i][j]= count;
