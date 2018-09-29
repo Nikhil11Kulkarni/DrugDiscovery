@@ -42,7 +42,7 @@ void splitString(string message, string delimiter, string result[], int n) {
 }
 
 void takeInput(string filename){
-    filename=filename+".graph";
+    // filename=filename+".graph";
     vector<string> lines;
     string line;
     ifstream myfile ( filename.c_str () );
@@ -134,7 +134,8 @@ void printInOutoutFile(vector<string> clauses, int numberOfVariables, string fil
 }
 
 int main(int argc, char** argv ) {
-	    string inputfilename ( argv[1] );
+	    string inputfilename = argv[1] ;
+        cout<<inputfilename<<endl;
 		takeInput(inputfilename);
         // takeInput("sample.txt")
 //ready with graph indexes as 1-n(vertex) and edges as matriz[n+1][n+1] (I think 1 indexed would be easier; Think first then implemnt)
