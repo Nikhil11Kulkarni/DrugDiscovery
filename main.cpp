@@ -66,7 +66,6 @@ void takeInput(string filename){
     numVertex = atof ( elements[0].c_str () );
     numEdges = atof ( elements[1].c_str () );
     k = atof ( elements[2].c_str () );
-
     // vector<vector<int> > matrix(numVertex,vector<int> (numVertex,0));
     edgeMatrixGraph.resize(numVertex, vector<int> (numVertex, 0));
     for(int i=0;i<numEdges;i++){
@@ -79,7 +78,7 @@ void takeInput(string filename){
         edgeMatrixGraph[row-1][col-1]=1;
         edgeMatrixGraph[col-1][row-1]=1;
     }
-    // cout<<numVertex<<" "<<numEdges<<" "<<k<<endl;
+    cout<<numVertex<<" "<<numEdges<<" "<<k<<endl;
     // for(auto row:edgeMatrixGraph){
     //     for(auto entry:row){
     //         cout<<entry<<" ";
@@ -90,23 +89,26 @@ void takeInput(string filename){
 ///less assume i have starting 3 parameters as: numV, numE,k
 ///i filled edgeMatrixGraph by 0/1
     int count=0;
+        cout<<"1:"<<numVertex<<" "<<numEdges<<" "<<k<<endl;
     numksubgraph.resize(k, vector<int> (numVertex, 0));
-    numksubgraph.resize(numVertex, vector<int> (numVertex, 0));
-    numksubgraph.resize(numVertex, vector<int> (numVertex, 0));
+    numedgeMatrixGraph.resize(numVertex, vector<int> (numVertex, 0));
+    numedgeSpanMatrix.resize(numVertex, vector<int> (numVertex, 0));
     
-    
+       cout<<"2:"<<numVertex<<" "<<numEdges<<" "<<k<<endl; 
     for(int i=0;i<k;i++){
         for(int j=0;j<numVertex;j++){
             numksubgraph[i][j]= count;
             count++;
         }
     }
+        cout<<numVertex<<" "<<numEdges<<" "<<k<<endl;
     for(int i=0;i<numVertex;i++){
         for(int j=0;j<numVertex;j++){
             numedgeMatrixGraph[i][j]= count;
             count++;
         }
     }
+        cout<<numVertex<<" "<<numEdges<<" "<<k<<endl;
     for(int i=0;i<numVertex;i++){
         for(int j=0;j<numVertex;j++){
             numedgeSpanMatrix[i][j]= count;
@@ -114,6 +116,7 @@ void takeInput(string filename){
         }
     }
     numberOfVariables = count;
+        cout << "yaay:"<<numberOfVariables;
 
 }
 
@@ -127,6 +130,7 @@ void printInOutoutFile(vector<string> clauses, int numberOfVariables, string fil
     fout <<"p cnf "<<numberOfVariables<<" "<<numberOfClauses<<"\n";
     for(int i=0;i<numberOfClauses;i++){
         fout<<clauses[i]<<"\n";
+        cout<<"\n"<<clauses[i]<<"\n";
     }
     fout.close();
 
@@ -134,9 +138,10 @@ void printInOutoutFile(vector<string> clauses, int numberOfVariables, string fil
 }
 
 int main(int argc, char** argv ) {
-	    string inputfilename = argv[1] ;
-        cout<<inputfilename<<endl;
+cout<<"strat"<<endl;
+	    string inputfilename ( argv[1] );
 		takeInput(inputfilename);
+cout<<"after takeinput"<<endl;
         // takeInput("sample.txt")
 //ready with graph indexes as 1-n(vertex) and edges as matriz[n+1][n+1] (I think 1 indexed would be easier; Think first then implemnt)
 		//CNF for 3 properties-->(span the global graph in nodes and edges), (complete graph), (NO subgraph of each other)
