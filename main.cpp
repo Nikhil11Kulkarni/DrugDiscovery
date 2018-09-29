@@ -41,7 +41,7 @@ void splitString(string message, string delimiter, string result[], int n) {
 }
 
 void takeInput(string filename){
-    filename=filename+".graph";
+    // filename=filename+".graph";
     vector<string> lines;
     string line;
     ifstream myfile ( filename.c_str () );
