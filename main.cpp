@@ -5,9 +5,7 @@
 #include <string>
 #include<time.h>
 #include <limits>
-#include <bits/stdc++.h>
 #include <ctime>
-#include "Board.h"
 using namespace std;
 
 //GLOBAL VARIABLES
@@ -39,7 +37,8 @@ void takeInput(string filename){
 
         string startTempLine = lines[0];
         string startElements[n];
-        splitString ( tempLine, " ", elements, n );
+        //splitString ( tempLine, " ", elements, n );
+
 ///less assume i have starting 3 parameters as: numV, numE,k
 ///i filled edgeMatrixGraph by 0/1
 int count=0;
