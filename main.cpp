@@ -3,13 +3,17 @@
 #include <sstream>
 #include <cstdlib>
 #include <string>
-#include<time.h>
+#include <time.h>
 #include <limits>
 #include <ctime>
+#include <vector>
+
 using namespace std;
 
 //GLOBAL VARIABLES
 int numVertex,numEdges,k;
+int numberOfVariables;
+
 vector<vector<int> > ksubgraph, edgeMatrixGraph, edgeSpanMatrix;
 vector<vector<int> > numksubgraph, numedgeMatrixGraph, numedgeSpanMatrix;
 //int ksubgraph[k][numVertex], edgeMatrixGraph[numVertex][numVertex], edgeSpanMatrix[numVertex][numVertex]; ///just 0-1 matrix (1 if vertex is present)
@@ -38,6 +42,7 @@ void splitString(string message, string delimiter, string result[], int n) {
 }
 
 void takeInput(string filename){
+    filename=filename+".graph";
     vector<string> lines;
     string line;
     ifstream myfile ( filename.c_str () );
@@ -108,6 +113,7 @@ void takeInput(string filename){
             count++;
         }
     }
+    numberOfVariables = count;
 
 }
 
@@ -130,6 +136,7 @@ void printInOutoutFile(vector<string> clauses, int numberOfVariables, string fil
 int main(int argc, char** argv ) {
 	    string inputfilename ( argv[1] );
 		takeInput(inputfilename);
+        // takeInput("sample.txt")
 //ready with graph indexes as 1-n(vertex) and edges as matriz[n+1][n+1] (I think 1 indexed would be easier; Think first then implemnt)
 		//CNF for 3 properties-->(span the global graph in nodes and edges), (complete graph), (NO subgraph of each other)
 		//k subgraohs represented as (k*n bool/ (0-1) matrix); every row represents vertices corresponding to it.
@@ -201,7 +208,6 @@ for(int i=0;i<numVertex;i++){
     //         }
     //     }
     // }
-
 
 
 printInOutoutFile(clauses, numberOfVariables, inputfilename);
