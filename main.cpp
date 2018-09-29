@@ -16,8 +16,7 @@ int numberOfVariables;
 
 vector<vector<int> > ksubgraph, edgeMatrixGraph, edgeSpanMatrix;
 vector<vector<int> > numksubgraph, numedgeMatrixGraph, numedgeSpanMatrix;
-//int ksubgraph[k][numVertex], edgeMatrixGraph[numVertex][numVertex], edgeSpanMatrix[numVertex][numVertex]; ///just 0-1 matrix (1 if vertex is present)
-//int numksubgraph[k][numVertex], numedgeMatrixGraph[numVertex][numVertex], numedgeSpanMatrix[numVertex][numVertex]; ///numerated
+
 
 //Take Input here.
 //read the graph edges as adjacency matrix(GIVE APPROPRIATE NAME FOR MATRIX: SO THAT I CAN GET IT)
@@ -63,10 +62,10 @@ void takeInput(string filename){
     string tempLine = lines[0];
     string *elements = new string[3];
     splitString ( tempLine, " ", elements, 3 );
-    numVertex = atof ( elements[0].c_str () );
+    numVertex = atof ( elements[0].c_str () ); //(0 - numVertex-1) 
     numEdges = atof ( elements[1].c_str () );
     k = atof ( elements[2].c_str () );
-    // vector<vector<int> > matrix(numVertex,vector<int> (numVertex,0));
+
     edgeMatrixGraph.resize(numVertex, vector<int> (numVertex, 0));
     for(int i=0;i<numEdges;i++){
         string tempLine = lines[i+1];
@@ -74,49 +73,41 @@ void takeInput(string filename){
         splitString ( tempLine, " ", elements, 2 );
         int row = atof ( elements[0].c_str () );
         int col = atof ( elements[1].c_str () );    
-        // cout<<row<<" "<<col<<endl;
         edgeMatrixGraph[row-1][col-1]=1;
         edgeMatrixGraph[col-1][row-1]=1;
     }
-    cout<<numVertex<<" "<<numEdges<<" "<<k<<endl;
-    // for(auto row:edgeMatrixGraph){
-    //     for(auto entry:row){
-    //         cout<<entry<<" ";
-    //     }
-    //     cout<<endl;
-    // }
+    cout<<"numVertex printed:"<<numVertex<<" "<<numEdges<<" "<<k<<endl;
 
-///less assume i have starting 3 parameters as: numV, numE,k
+///lets assume i have starting 3 parameters as: numV, numE,k
 ///i filled edgeMatrixGraph by 0/1
-    int count=0;
-        cout<<"1:"<<numVertex<<" "<<numEdges<<" "<<k<<endl;
+    int count=1;
+
     numksubgraph.resize(k, vector<int> (numVertex, 0));
     numedgeMatrixGraph.resize(numVertex, vector<int> (numVertex, 0));
     numedgeSpanMatrix.resize(numVertex, vector<int> (numVertex, 0));
     
-       cout<<"2:"<<numVertex<<" "<<numEdges<<" "<<k<<endl; 
     for(int i=0;i<k;i++){
         for(int j=0;j<numVertex;j++){
             numksubgraph[i][j]= count;
             count++;
         }
     }
-        cout<<numVertex<<" "<<numEdges<<" "<<k<<endl;
+        // cout<<numVertex<<" "<<numEdges<<" "<<k<<endl;
     for(int i=0;i<numVertex;i++){
         for(int j=0;j<numVertex;j++){
             numedgeMatrixGraph[i][j]= count;
             count++;
         }
     }
-        cout<<numVertex<<" "<<numEdges<<" "<<k<<endl;
+        // cout<<numVertex<<" "<<numEdges<<" "<<k<<endl;
     for(int i=0;i<numVertex;i++){
         for(int j=0;j<numVertex;j++){
             numedgeSpanMatrix[i][j]= count;
             count++;
         }
     }
-    numberOfVariables = count;
-        cout << "yaay:"<<numberOfVariables;
+        numberOfVariables = count-1;
+        cout << "yaay:numberOfVariables:"<<numberOfVariables; // in 1 indexing 0-numVariables
 
 }
 
@@ -129,8 +120,9 @@ void printInOutoutFile(vector<string> clauses, int numberOfVariables, string fil
     fout.open(filename, ios::out | ios::app);
     fout <<"p cnf "<<numberOfVariables<<" "<<numberOfClauses<<"\n";
     for(int i=0;i<numberOfClauses;i++){
-        fout<<clauses[i]<<"\n";
-        cout<<"\n"<<clauses[i]<<"\n";
+        fout<<clauses[i]<<" 0";
+        if(i<numberOfClauses-1)fout<<"\n" ; //Just to remove last \n
+        cout<<"\n"<<clauses[i];
     }
     fout.close();
 
@@ -138,12 +130,11 @@ void printInOutoutFile(vector<string> clauses, int numberOfVariables, string fil
 }
 
 int main(int argc, char** argv ) {
-cout<<"strat"<<endl;
+
 	    string inputfilename ( argv[1] );
 		takeInput(inputfilename);
-cout<<"after takeinput"<<endl;
-        // takeInput("sample.txt")
-//ready with graph indexes as 1-n(vertex) and edges as matriz[n+1][n+1] (I think 1 indexed would be easier; Think first then implemnt)
+
+        //ready with graph indexes as 1-n(vertex) and edges as matriz[n+1][n+1] (I think 1 indexed would be easier; Think first then implemnt)
 		//CNF for 3 properties-->(span the global graph in nodes and edges), (complete graph), (NO subgraph of each other)
 		//k subgraohs represented as (k*n bool/ (0-1) matrix); every row represents vertices corresponding to it.
 	
@@ -154,7 +145,7 @@ for(int i=0;i<numVertex;i++){
     for(int j=0;j<numVertex;j++){
         string temp;
         if(edgeMatrixGraph[i][j]==1){temp = to_string(numedgeMatrixGraph[i][j]);}
-        else if(edgeMatrixGraph[i][j]==0){temp = to_string(-1*numedgeMatrixGraph[i][j]);}        
+        else if(edgeMatrixGraph[i][j]==0){temp = to_string(-1*(numedgeMatrixGraph[i][j]));}        
         clauses.push_back(temp);
     }
 }
@@ -163,10 +154,22 @@ for(int i=0;i<numVertex;i++){
 	for(int i=0;i<numVertex;i++){
         string temp="";
 		for(int j=0;j<k;j++){
-            temp=temp+to_string(numksubgraph[j][i])+" " ;//EXTRA " " space is printed at the end TAKE A NOTE numksubgraph[k][n] 
-		}
+            temp=temp+to_string(numksubgraph[j][i]) ;//EXTRA " " space is printed at the end TAKE A NOTE numksubgraph[k][n] 
+		    if(j<k-1)temp=temp+" ";
+        }
         clauses.push_back(temp);
 	}
+
+//NON-EMPTY SUBGRAPHS
+    for(int i=0;i<k;i++){
+        string temp="";
+        for(int j=0;j<numVertex;j++){
+            temp=temp+to_string(numksubgraph[i][j]) ;//EXTRA " " space is printed at the end TAKE A NOTE numksubgraph[k][n] 
+            if(j<numVertex-1)temp=temp+" ";
+        }
+        clauses.push_back(temp);
+    }
+
 
 //SPAN--EDGE
     for(int i=0;i<k;i++){
@@ -176,8 +179,18 @@ for(int i=0;i<numVertex;i++){
                 temp=temp+to_string(numedgeSpanMatrix[nV1][nV2])+" ";
                 temp=temp+to_string(-1*numksubgraph[i][nV1])+" ";
                 temp=temp+to_string(-1*numksubgraph[i][nV2]);
-                
                 clauses.push_back(temp);
+
+                string temp1="";
+                temp1=temp1+to_string(-1*numedgeSpanMatrix[nV1][nV2])+" ";
+                temp1=temp1+to_string(numksubgraph[i][nV1]);
+                clauses.push_back(temp1);
+
+                string temp2="";
+                temp2=temp2+to_string(-1*numedgeSpanMatrix[nV1][nV2])+" ";
+                temp2=temp2+to_string(numksubgraph[i][nV2]);
+                clauses.push_back(temp2);
+
             }
         }
     }
@@ -200,8 +213,17 @@ for(int i=0;i<numVertex;i++){
                 temp=temp+to_string(numedgeMatrixGraph[nV1][nV2])+" ";
                 temp=temp+to_string(-1*numksubgraph[i][nV1])+" ";
                 temp=temp+to_string(-1*numksubgraph[i][nV2]);
-                
                 clauses.push_back(temp);
+                
+                string temp1="";
+                temp1=temp1+to_string(-1*numedgeMatrixGraph[nV1][nV2])+" ";
+                temp1=temp1+to_string(numksubgraph[i][nV1]);
+                clauses.push_back(temp1);
+                
+                string temp2="";
+                temp2=temp2+to_string(-1*numedgeMatrixGraph[nV1][nV2])+" ";
+                temp2=temp2+to_string(numksubgraph[i][nV2]);
+                clauses.push_back(temp2);                
             }
         }
     }
@@ -216,8 +238,15 @@ for(int i=0;i<numVertex;i++){
     // }
 
 
+
 printInOutoutFile(clauses, numberOfVariables, inputfilename);
 
 }
 
 
+
+
+
+////  DEBUGG COMMENTS:
+//cout<<"strat"<<endl;
+// cout<<"after takeinput"<<endl;
