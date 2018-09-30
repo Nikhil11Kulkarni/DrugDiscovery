@@ -17,6 +17,7 @@ int numberOfVariables;
 vector<vector<int> >  edgeMatrixGraph; //ksubgraph, edgeSpanMatrix
 vector<vector<int> > numksubgraph, numedgeMatrixGraph, numedgeSpanMatrix;
 
+vector<vector<vector<int> > > edgeChecker; 
 
 //Take Input here.
 //read the graph edges as adjacency matrix(GIVE APPROPRIATE NAME FOR MATRIX: SO THAT I CAN GET IT)
@@ -85,6 +86,7 @@ void takeInput(string filename){
     numksubgraph.resize(k, vector<int> (numVertex, 0));
     numedgeMatrixGraph.resize(numVertex, vector<int> (numVertex, 0));
     numedgeSpanMatrix.resize(numVertex, vector<int> (numVertex, 0));
+    edgeChecker.resize(k,vector<vector<int > > (numVertex, vector<int> (numVertex, 0)));
     
     for(int i=0;i<k;i++){
         for(int j=0;j<numVertex;j++){
@@ -104,12 +106,23 @@ void takeInput(string filename){
         cout<<endl;
     }
         // cout<<numVertex<<" "<<numEdges<<" "<<k<<endl;
-    for(int i=0;i<numVertex;i++){
-        for(int j=0;j<numVertex;j++){
-            numedgeSpanMatrix[i][j]= count;
-            count++;
+    // for(int i=0;i<numVertex;i++){
+    //     for(int j=0;j<numVertex;j++){
+    //         numedgeSpanMatrix[i][j]= count;
+    //         count++;
+    //     }
+    // }
+    for(int i=0;i<k;i++){
+        for(int nV1=0;nV1<numVertex;nV1++){
+            for(int nV2=0; nV2<numVertex ;nV2++){
+                edgeChecker[i][nV1][nV2]=count;
+                count++;
+            }
         }
     }
+
+
+
         numberOfVariables = count-1;
         cout << "yaay:numberOfVariables:"<<numberOfVariables; // in 1 indexing 0-numVariables
 
@@ -176,15 +189,15 @@ for(int i=0;i<numVertex;i++){
 
 
 //SPAN--EDGE
-    for(int i=0;i<k;i++){
-        for(int nV1=0;nV1<numVertex;nV1++){
-            for(int nV2=0; nV2<numVertex ;nV2++){
-                if(nV2!= nV1){
-                                string temp="";
-                                temp=temp+to_string(-1*numksubgraph[i][nV2])+" ";
-                                temp=temp+to_string(-1*numksubgraph[i][nV1])+" ";
-                                temp=temp+to_string(numedgeSpanMatrix[nV1][nV2]);
-                                clauses.push_back(temp);
+    // for(int i=0;i<k;i++){
+    //     for(int nV1=0;nV1<numVertex;nV1++){
+    //         for(int nV2=0; nV2<numVertex ;nV2++){
+    //             if(nV2!= nV1){
+                                // string temp="";
+                                // temp=temp+to_string(-1*numksubgraph[i][nV2])+" ";
+                                // temp=temp+to_string(-1*numksubgraph[i][nV1])+" ";
+                                // temp=temp+to_string(numedgeSpanMatrix[nV1][nV2]);
+                                // clauses.push_back(temp);
             
                                 // string temp1="";
                                 // temp1=temp1+to_string(numksubgraph[i][nV1])+" ";
@@ -195,21 +208,79 @@ for(int i=0;i<numVertex;i++){
                                 // temp2=temp2+to_string(numksubgraph[i][nV2])+" ";                
                                 // temp2=temp2+to_string(-1*numedgeSpanMatrix[nV1][nV2]);
                                 // clauses.push_back(temp2);
+    //             }
+    //         }
+    //     }
+    // }
+
+
+    // for(int i=0;i<numVertex;i++){
+    //     for(int j=0;j<numVertex;j++){
+    //         string temp1="", temp2="" ;
+    //         temp1 = temp1 + to_string(numedgeMatrixGraph[i][j]) +" "+ to_string(-1*numedgeSpanMatrix[i][j]);
+    //         temp2 = temp2 + to_string(-1*numedgeMatrixGraph[i][j]) +" "+to_string(numedgeSpanMatrix[i][j]);
+    //         clauses.push_back(temp1);
+    //         clauses.push_back(temp2);
+    //     }
+    // }
+
+    for(int i=0;i<k;i++){
+        for(int nV1=0;nV1<numVertex;nV1++){
+            for(int nV2=0; nV2<numVertex ;nV2++){
+                if(nV1!=nV2){
+                                string temp="";
+                                temp=temp+to_string(-1*numksubgraph[i][nV2])+" ";
+                                temp=temp+to_string(-1*numksubgraph[i][nV1])+" ";
+                                temp=temp+to_string(edgeChecker[i][nV1][nV2]);
+                                clauses.push_back(temp);
+            
+                                string temp1="";
+                                temp1=temp1+to_string(numksubgraph[i][nV1])+" ";
+                                temp1=temp1+to_string(-1*edgeChecker[i][nV1][nV2]);
+                                clauses.push_back(temp1);
+            
+                                string temp2="";
+                                temp2=temp2+to_string(numksubgraph[i][nV2])+" ";                
+                                temp2=temp2+to_string(-1*edgeChecker[i][nV1][nV2]);
+                                clauses.push_back(temp2);
                 }
             }
         }
     }
 
 
+
     for(int i=0;i<numVertex;i++){
         for(int j=0;j<numVertex;j++){
-            string temp1="", temp2="" ;
-            temp1 = temp1 + to_string(numedgeMatrixGraph[i][j]) +" "+ to_string(-1*numedgeSpanMatrix[i][j]);
-            temp2 = temp2 + to_string(-1*numedgeMatrixGraph[i][j]) +" "+to_string(numedgeSpanMatrix[i][j]);
-            clauses.push_back(temp1);
-            clauses.push_back(temp2);
+            if(i!=j){
+                        string temp1="";
+                        temp1 = temp1 + to_string(-1*numedgeMatrixGraph[i][j]) +" ";
+                        for(int p=0;p<k;p++){
+                            temp1=temp1+ to_string(edgeChecker[p][i][j]);
+                            if(p<k-1)temp1=temp1+" ";
+                        } 
+                        clauses.push_back(temp1);
+                    }
         }
     }
+
+    for(int i=0;i<numVertex;i++){
+        for(int j=0;j<numVertex;j++){
+            for(int p=0;p<k;p++){
+                string temp1="";
+                temp1 = temp1 + to_string(numedgeMatrixGraph[i][j]) +" ";
+                temp1=temp1+ to_string(-1*edgeChecker[p][i][j]);
+                clauses.push_back(temp1);
+            } 
+        }
+    }
+
+
+
+
+
+
+
 
 //COMPLETE
     for(int i=0;i<k;i++){
