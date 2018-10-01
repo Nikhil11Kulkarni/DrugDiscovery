@@ -87,7 +87,7 @@ void takeInput(string filename){
     numedgeMatrixGraph.resize(numVertex, vector<int> (numVertex, 0));
     numedgeSpanMatrix.resize(numVertex, vector<int> (numVertex, 0));
     edgeChecker.resize(k,vector<vector<int > > (numVertex, vector<int> (numVertex, 0)));
-    subgraphChecker.resize(k,vector<vector<int > > (numVertex, vector<int> (numVertex, 0)));
+    subgraphChecker.resize(k,vector<vector<int > > (k, vector<int> (numVertex, 0)));
    
     for(int i=0;i<k;i++){
         for(int j=0;j<numVertex;j++){
@@ -97,7 +97,7 @@ void takeInput(string filename){
         }
         cout<<endl;
     }
-        // cout<<numVertex<<" "<<numEdges<<" "<<k<<endl;
+        // cout<<numVertex<<"---------- "<<numEdges<<" "<<k<<endl;
     for(int i=0;i<numVertex;i++){
         for(int j=0;j<numVertex;j++){
             numedgeMatrixGraph[i][j]= count;
@@ -106,7 +106,7 @@ void takeInput(string filename){
         }
         cout<<endl;
     }
-        // cout<<numVertex<<" "<<numEdges<<" "<<k<<endl;
+//     cout<<numVertex<<"********** "<<numEdges<<" "<<k<<endl;
     // for(int i=0;i<numVertex;i++){
     //     for(int j=0;j<numVertex;j++){
     //         numedgeSpanMatrix[i][j]= count;
