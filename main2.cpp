@@ -167,7 +167,7 @@ void printInOutoutFile(string filename){
 
 
     ofstream fout;
-    filename=filename+".graphoutput";  
+    filename=filename+".subgraphs";  
     fout.open(filename, ios::out | ios::app);
 
 if(solutionExists==false){
@@ -179,11 +179,15 @@ else if(solutionExists==true){
         temp1=temp1+"#"+to_string(i+1);
         int countVertex=0;
         for(int j=0;j<numVertex;j++){
-            if(ksubgraph[i][j]==1){ temp2=temp2+ to_string(j+1)+" "; countVertex++;}
+            if(ksubgraph[i][j]==1){ 
+                 if(countVertex!=0)temp2=temp2+" ";
+                 temp2=temp2+ to_string(j+1);
+                 countVertex++;}
         }
         temp1= temp1+" "+to_string(countVertex) ;
         fout<<temp1<<"\n";
-        fout<<temp2<<"\n";
+        fout<<temp2;
+        if(i<k-1)fout<<"\n";
     }
     fout.close();
 
