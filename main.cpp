@@ -17,7 +17,7 @@ int numberOfVariables;
 vector<vector<int> >  edgeMatrixGraph; //ksubgraph, edgeSpanMatrix
 vector<vector<int> > numksubgraph, numedgeMatrixGraph, numedgeSpanMatrix;
 
-vector<vector<vector<int> > > edgeChecker; 
+vector<vector<vector<int> > > edgeChecker, subgraphChecker; 
 
 //Take Input here.
 //read the graph edges as adjacency matrix(GIVE APPROPRIATE NAME FOR MATRIX: SO THAT I CAN GET IT)
@@ -87,7 +87,8 @@ void takeInput(string filename){
     numedgeMatrixGraph.resize(numVertex, vector<int> (numVertex, 0));
     numedgeSpanMatrix.resize(numVertex, vector<int> (numVertex, 0));
     edgeChecker.resize(k,vector<vector<int > > (numVertex, vector<int> (numVertex, 0)));
-    
+    subgraphChecker.resize(k,vector<vector<int > > (numVertex, vector<int> (numVertex, 0)));
+   
     for(int i=0;i<k;i++){
         for(int j=0;j<numVertex;j++){
             numksubgraph[i][j]= count;
@@ -120,7 +121,14 @@ void takeInput(string filename){
             }
         }
     }
-
+    for(int i=0;i<k;i++){
+        for(int j=0;j<k;j++){
+            for(int nV=0; nV<numVertex ;nV++){
+                subgraphChecker[i][j][nV]=count;
+                count++;
+            }
+        }
+    }
 
 
         numberOfVariables = count-1;
@@ -224,56 +232,56 @@ for(int i=0;i<numVertex;i++){
     //     }
     // }
 
-    for(int i=0;i<k;i++){
-        for(int nV1=0;nV1<numVertex;nV1++){
-            for(int nV2=0; nV2<numVertex ;nV2++){
-                if(nV1!=nV2){
-                                string temp="";
-                                temp=temp+to_string(-1*numksubgraph[i][nV2])+" ";
-                                temp=temp+to_string(-1*numksubgraph[i][nV1])+" ";
-                                temp=temp+to_string(edgeChecker[i][nV1][nV2]);
-                                clauses.push_back(temp);
+    // for(int i=0;i<k;i++){
+    //     for(int nV1=0;nV1<numVertex;nV1++){
+    //         for(int nV2=0; nV2<numVertex ;nV2++){
+    //             if(nV1!=nV2){
+    //                             string temp="";
+    //                             temp=temp+to_string(-1*numksubgraph[i][nV2])+" ";
+    //                             temp=temp+to_string(-1*numksubgraph[i][nV1])+" ";
+    //                             temp=temp+to_string(edgeChecker[i][nV1][nV2]);
+    //                             clauses.push_back(temp);
             
-                                string temp1="";
-                                temp1=temp1+to_string(numksubgraph[i][nV1])+" ";
-                                temp1=temp1+to_string(-1*edgeChecker[i][nV1][nV2]);
-                                clauses.push_back(temp1);
+    //                             string temp1="";
+    //                             temp1=temp1+to_string(numksubgraph[i][nV1])+" ";
+    //                             temp1=temp1+to_string(-1*edgeChecker[i][nV1][nV2]);
+    //                             clauses.push_back(temp1);
             
-                                string temp2="";
-                                temp2=temp2+to_string(numksubgraph[i][nV2])+" ";                
-                                temp2=temp2+to_string(-1*edgeChecker[i][nV1][nV2]);
-                                clauses.push_back(temp2);
-                }
-            }
-        }
-    }
+    //                             string temp2="";
+    //                             temp2=temp2+to_string(numksubgraph[i][nV2])+" ";                
+    //                             temp2=temp2+to_string(-1*edgeChecker[i][nV1][nV2]);
+    //                             clauses.push_back(temp2);
+    //             }
+    //         }
+    //     }
+    // }
 
 
 
-    for(int i=0;i<numVertex;i++){
-        for(int j=0;j<numVertex;j++){
-            if(i!=j){
-                        string temp1="";
-                        temp1 = temp1 + to_string(-1*numedgeMatrixGraph[i][j]) +" ";
-                        for(int p=0;p<k;p++){
-                            temp1=temp1+ to_string(edgeChecker[p][i][j]);
-                            if(p<k-1)temp1=temp1+" ";
-                        } 
-                        clauses.push_back(temp1);
-                    }
-        }
-    }
+    // for(int i=0;i<numVertex;i++){
+    //     for(int j=0;j<numVertex;j++){
+    //         if(i!=j){
+    //                     string temp1="";
+    //                     temp1 = temp1 + to_string(-1*numedgeMatrixGraph[i][j]) +" ";
+    //                     for(int p=0;p<k;p++){
+    //                         temp1=temp1+ to_string(edgeChecker[p][i][j]);
+    //                         if(p<k-1)temp1=temp1+" ";
+    //                     } 
+    //                     clauses.push_back(temp1);
+    //                 }
+    //     }
+    // }
 
-    for(int i=0;i<numVertex;i++){
-        for(int j=0;j<numVertex;j++){
-            for(int p=0;p<k;p++){
-                string temp1="";
-                temp1 = temp1 + to_string(numedgeMatrixGraph[i][j]) +" ";
-                temp1=temp1+ to_string(-1*edgeChecker[p][i][j]);
-                clauses.push_back(temp1);
-            } 
-        }
-    }
+    // for(int i=0;i<numVertex;i++){
+    //     for(int j=0;j<numVertex;j++){
+    //         for(int p=0;p<k;p++){
+    //             string temp1="";
+    //             temp1 = temp1 + to_string(numedgeMatrixGraph[i][j]) +" ";
+    //             temp1=temp1+ to_string(-1*edgeChecker[p][i][j]);
+    //             clauses.push_back(temp1);
+    //         } 
+    //     }
+    // }
 
 
 
@@ -309,14 +317,78 @@ for(int i=0;i<numVertex;i++){
 }
 //NO SUBGRAPH    
     // for(int i=0;i<k;i++){
-    //     for(int j=0;j<k;j++){
+    //     for(int j=i+1;j<k;j++){
     //         for(int p=0; p<numVertex;p++){
-     
+    //             numksubgraph[i][p]
 
     //         }
     //     }
     // }
 
+    
+
+    for(int i=0;i<k;i++){
+        for(int j=0;j<k;j++){
+                
+
+            if(i>j){
+                for(int nV=0; nV<numVertex ;nV++){
+                    
+                    // string temp="";
+                    // temp=temp+to_string(-1*subgraphChecker[i][j][nV])+" ";
+                    // temp=temp+to_string(subgraphChecker[j][i][nV])+" ";
+                    // clauses.push_back(temp);
+                    // temp="";
+                    // temp=temp+to_string(subgraphChecker[i][j][nV])+" ";
+                    // temp=temp+to_string(-1*subgraphChecker[j][i][nV])+" ";
+                    // clauses.push_back(temp);
+                    
+                    ////////
+                    temp="";
+                    temp=temp+to_string(-1*numksubgraph[i][nV])+" ";
+                    temp=temp+to_string(numksubgraph[j][nV])+" ";
+                    temp=temp+to_string(subgraphChecker[i][j][nV])+" ";
+                    clauses.push_back(temp);
+                    temp="";
+                    temp=temp+to_string(numksubgraph[i][nV])+" ";
+                    temp=temp+to_string(-1*subgraphChecker[i][j][nV])+" ";
+                    clauses.push_back(temp);
+                    temp="";
+                    temp=temp+to_string(-1*numksubgraph[j][nV])+" ";
+                    temp=temp+to_string(-1*subgraphChecker[i][j][nV])+" ";
+                    clauses.push_back(temp);
+                }
+            }
+            else if(i<j){
+                for(int nV=0; nV<numVertex ;nV++){
+                    string temp="";
+                    temp=temp+to_string(numksubgraph[i][nV])+" ";
+                    temp=temp+to_string(-1*numksubgraph[j][nV])+" ";
+                    temp=temp+to_string(subgraphChecker[i][j][nV])+" ";
+                    clauses.push_back(temp);
+                    temp="";
+                    temp=temp+to_string(-1*numksubgraph[i][nV])+" ";
+                    temp=temp+to_string(-1*subgraphChecker[i][j][nV])+" ";
+                    clauses.push_back(temp);
+                    temp="";
+                    temp=temp+to_string(numksubgraph[j][nV])+" ";
+                    temp=temp+to_string(-1*subgraphChecker[i][j][nV])+" ";
+                    clauses.push_back(temp);
+                }
+            }
+        }
+    }
+    for(int i=0;i<k;i++){
+        for(int j=0;j<k;j++){
+            if(i<j){
+                string temp="";
+                for(int nV=0; nV<numVertex ;nV++){
+                    temp=temp+to_string(subgraphChecker[i][j][nV])+" ";
+                }
+                clauses.push_back(temp);
+            }
+        }
+    }
 
 
 printInOutoutFile(clauses, numberOfVariables, inputfilename);
