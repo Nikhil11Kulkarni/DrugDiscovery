@@ -315,36 +315,13 @@ for(int i=0;i<numVertex;i++){
         }
     }
 }
-//NO SUBGRAPH    
-    // for(int i=0;i<k;i++){
-    //     for(int j=i+1;j<k;j++){
-    //         for(int p=0; p<numVertex;p++){
-    //             numksubgraph[i][p]
-
-    //         }
-    //     }
-    // }
-
-    
-
+/**********    NO SUBGRAPH    **********/
     for(int i=0;i<k;i++){
         for(int j=0;j<k;j++){
                 
-
-            if(i>j){
+            if(i!=j){
+                string temp="";
                 for(int nV=0; nV<numVertex ;nV++){
-                    
-                    // string temp="";
-                    // temp=temp+to_string(-1*subgraphChecker[i][j][nV])+" ";
-                    // temp=temp+to_string(subgraphChecker[j][i][nV])+" ";
-                    // clauses.push_back(temp);
-                    // temp="";
-                    // temp=temp+to_string(subgraphChecker[i][j][nV])+" ";
-                    // temp=temp+to_string(-1*subgraphChecker[j][i][nV])+" ";
-                    // clauses.push_back(temp);
-                    
-                    ////////
-                    temp="";
                     temp=temp+to_string(-1*numksubgraph[i][nV])+" ";
                     temp=temp+to_string(numksubgraph[j][nV])+" ";
                     temp=temp+to_string(subgraphChecker[i][j][nV])+" ";
@@ -355,23 +332,6 @@ for(int i=0;i<numVertex;i++){
                     clauses.push_back(temp);
                     temp="";
                     temp=temp+to_string(-1*numksubgraph[j][nV])+" ";
-                    temp=temp+to_string(-1*subgraphChecker[i][j][nV])+" ";
-                    clauses.push_back(temp);
-                }
-            }
-            else if(i<j){
-                for(int nV=0; nV<numVertex ;nV++){
-                    string temp="";
-                    temp=temp+to_string(numksubgraph[i][nV])+" ";
-                    temp=temp+to_string(-1*numksubgraph[j][nV])+" ";
-                    temp=temp+to_string(subgraphChecker[i][j][nV])+" ";
-                    clauses.push_back(temp);
-                    temp="";
-                    temp=temp+to_string(-1*numksubgraph[i][nV])+" ";
-                    temp=temp+to_string(-1*subgraphChecker[i][j][nV])+" ";
-                    clauses.push_back(temp);
-                    temp="";
-                    temp=temp+to_string(numksubgraph[j][nV])+" ";
                     temp=temp+to_string(-1*subgraphChecker[i][j][nV])+" ";
                     clauses.push_back(temp);
                 }
@@ -380,7 +340,7 @@ for(int i=0;i<numVertex;i++){
     }
     for(int i=0;i<k;i++){
         for(int j=0;j<k;j++){
-            if(i<j){
+            if(i!=j){
                 string temp="";
                 for(int nV=0; nV<numVertex ;nV++){
                     temp=temp+to_string(subgraphChecker[i][j][nV])+" ";
@@ -396,8 +356,77 @@ printInOutoutFile(clauses, numberOfVariables, inputfilename);
 }
 
 
+/*********** Main Ended **********/
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// for(int i=0;i<k;i++){
+//         for(int j=0;j<k;j++){
+                
+            
+//             // if(i>j){
+//             //     for(int nV=0; nV<numVertex ;nV++){
+                    
+//             //         // string temp="";
+//             //         // temp=temp+to_string(-1*subgraphChecker[i][j][nV])+" ";
+//             //         // temp=temp+to_string(subgraphChecker[j][i][nV])+" ";
+//             //         // clauses.push_back(temp);
+//             //         // temp="";
+//             //         // temp=temp+to_string(subgraphChecker[i][j][nV])+" ";
+//             //         // temp=temp+to_string(-1*subgraphChecker[j][i][nV])+" ";
+//             //         // clauses.push_back(temp);
+                    
+//             //         ////////
+//             //         string temp="";
+//             //         temp=temp+to_string(-1*numksubgraph[i][nV])+" ";
+//             //         temp=temp+to_string(numksubgraph[j][nV])+" ";
+//             //         temp=temp+to_string(subgraphChecker[i][j][nV])+" ";
+//             //         clauses.push_back(temp);
+//             //         temp="";
+//             //         temp=temp+to_string(numksubgraph[i][nV])+" ";
+//             //         temp=temp+to_string(-1*subgraphChecker[i][j][nV])+" ";
+//             //         clauses.push_back(temp);
+//             //         temp="";
+//             //         temp=temp+to_string(-1*numksubgraph[j][nV])+" ";
+//             //         temp=temp+to_string(-1*subgraphChecker[i][j][nV])+" ";
+//             //         clauses.push_back(temp);
+//             //     }
+//             // }
+//             // else if(i<j){
+//             //     for(int nV=0; nV<numVertex ;nV++){
+//             //         string temp="";
+//             //         temp=temp+to_string(numksubgraph[i][nV])+" ";
+//             //         temp=temp+to_string(-1*numksubgraph[j][nV])+" ";
+//             //         temp=temp+to_string(subgraphChecker[i][j][nV])+" ";
+//             //         clauses.push_back(temp);
+//             //         temp="";
+//             //         temp=temp+to_string(-1*numksubgraph[i][nV])+" ";
+//             //         temp=temp+to_string(-1*subgraphChecker[i][j][nV])+" ";
+//             //         clauses.push_back(temp);
+//             //         temp="";
+//             //         temp=temp+to_string(numksubgraph[j][nV])+" ";
+//             //         temp=temp+to_string(-1*subgraphChecker[i][j][nV])+" ";
+//             //         clauses.push_back(temp);
+//             //     }
+//             // }
+//         }
+//     }
 
 ////  DEBUGG COMMENTS:
 //cout<<"strat"<<endl;
